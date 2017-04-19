@@ -1,0 +1,547 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+
+@{
+    ViewBag.Title = "Help";
+}
+
+<div class="jumbotron" id="Help" style="font-size: 16px;">
+    <h1 style="font-size: 50px; text-align:center; font-weight: bold; color: black;">Mug-Share Help</h1>
+
+    <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
+
+    <h3 style="font-weight: bold; color: black;">Table of Contents</h3>
+    <p style="text-align:justify">
+        <ul style="margin-left: 2em;">
+            <li>
+                <a href="#1.0">1.0 Home</a>
+                <ul>
+                    <li><a href="#1.1">1.1 How to Return a Borrowed Mug</a></li>
+                    <li><a href="#1.2">1.2 How to View the Program’s Monthly Statistics Chart</a></li>
+                    <li><a href="#1.3">1.3 How to View the Program’s Yearly Statistics Chart</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#2.0">2.0 Mug-Share Users</a>
+                <ul>
+                    <li><a href="#2.1">2.1 How to Add a New User to the Program</a></li>
+                    <li><a href="#2.2">2.2 How to Upload a List of User Records From an Excel Document</a></li>
+                    <li><a href="#2.3">2.3 How to View a User’s Profile</a></li>
+                    <li><a href="#2.4">2.4 How to Edit a User’s Profile</a></li>
+                    <li><a href="#2.5">2.5 How to Remove a User From the Program</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#3.0">3.0 Location Supply</a>
+                <ul>
+                    <li><a href="#3.1">3.1 How to Add a New Dispensing Machine to the Program</a></li>
+                    <li><a href="#3.2">3.2 How to View a Machine’s Profile</a></li>
+                    <li><a href="#3.3">3.3 How to View a Machine’s Hourly Statistics Chart</a></li>
+                    <li><a href="#3.4">3.4 How to Edit a Machine’s Profile</a></li>
+                    <li><a href="#3.5">3.5 How to Remove a Dispensing Machine From the Program</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#4.0">4.0 Mug Registry</a>
+                <ul>
+                    <li><a href="#4.1">4.1 How to Add a New Mug to the Program</a></li>
+                    <li><a href="#4.2">4.2 How to View a Mug’s Profile</a></li>
+                    <li><a href="#4.3">4.3 How to Edit a Mug’s Profile</a></li>
+                    <li><a href="#4.4">4.4 How to Remove a Mug From the Program</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#5.0">5.0 About Us</a></li>
+
+            <li>
+                <a href="#6.0">6.0 Change Password</a>
+                <ul>
+                    <li><a href="#6.1">6.1 How to Change Password</a></li>
+                </ul>
+            </li>
+            @{
+                var Permission = MugShareApplication.Controllers.BaseController.SessionStorage.AdminPermission;
+                if (Permission == "Admin")
+                {
+                    <li>
+                        <a href="#7.0">7.0 Security</a>
+                        <ul>
+                            <li><a href="#7.1">7.1 How to Add a New Staff User to the Program</a></li>
+                            <li><a href="#7.2">7.2 How to View a Staff User’s Profile</a></li>
+                            <li><a href="#7.3">7.3 How to Edit a Staff User’s Profile</a></li>
+                            <li><a href="#7.4">7.4 How to Remove a Staff User From the Program</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#8.0">8.0 Email List</a>
+                        <ul>
+                            <li><a href="#8.1">8.1 How to Obtain the Email List of Admin Users</a></li>
+                            <li><a href="#8.2">8.2 How to Obtain the Email List of Staff Users</a></li>
+                            <li><a href="#8.3">8.3 How to Obtain the Email List of Mug-Share Users</a></li>
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </p>
+    <a href="#">Back to top</a>
+    <hr id="1.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         1.0 Home Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">1.0 Home</h2>
+    <p style="text-align:justify">
+        The Home page is used for processing mug returns and view monthly and yearly statistics charts.
+        <br />
+        <br />
+        Access this page by clicking the ‘Home’ tab on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <h3 id="1.1" style="font-weight: bold; color: black;">1.1 How to Return a Borrowed Mug</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the blue ‘Mug Return’ button to open a modal window.</li>
+            <li>Make sure that the RFID reader is plugged into one of the USB ports on your PC.</li>
+            <li>Click the ‘Scan RFID’ button and proceed to scan the bottom of the mug on the RFID reader.</li>
+            <li>Click the blue ‘Process Return’ button to update the database to say that the mug has been returned, and clear the associated user’s rental status.</li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="1.2" style="font-weight: bold; color: black;">1.2 How to View the Program’s Monthly Statistics Chart</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the blue ‘Monthly Statistics’ button at the bottom left of the page to open a modal containing the monthly statistics chart of the program.</li>
+            <li>Click the ‘X’ button in the top right when you are done viewing the monthly statistics chart in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <h3 id="1.3" style="font-weight: bold; color: black;">1.3 How to View the Program’s Yearly Statistics Chart</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the blue ‘Yearly Statistics’ button at the bottom right of the page to open a modal containing the yearly statistics line graph of the program.</li>
+            <li>Click the ‘X’ button in the top right when you are done viewing the yearly statistics chart in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <a href="#">Back to top</a>
+    <hr id="2.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         2.0 Mug-Share Users Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">2.0 Mug-Share Users</h2>
+    <p style="text-align:justify">
+        The Mug-Share Users web page is used to manage the Mug-Share Users data table in the database.
+        Users can be added individually and through an excel upload, once created, user profiles can be viewed, edited, and deleted.
+        The search bar on the top right can be used to find a record based on UBC ID, first name, last name, or total mugs borrowed.
+        <br />
+        <br />
+        Access this page by clicking the ‘Mug-Share Users’ tab on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <h3 id="2.1" style="font-weight: bold; color: black;">2.1 How to Add a New User to the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the green ‘Create New’ button above the top left of the data table to open a modal window.</li>
+            <li>
+                Fill out the user’s information, while keeping in mind the following rules:
+                <ul>
+                    <li>UBC ID - must be a 7 or 8 digit number that does not already exist in the database</li>
+                    <li>Email - must not already exist in the database</li>
+                    <li>Notes - this field may remain empty and is used for storing any special notes</li>
+                </ul>
+            </li>
+            <li>Once the all the required fields are filled out, click the blue ‘Save’ button to add the new user record to the database.</li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="2.2" style="font-weight: bold; color: black;">2.2 How to Upload a List of User Records From an Excel Document</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the blue ‘Upload From Excel’ button above the top left of the data table to open a modal window.</li>
+            <li>Click the ‘Browse’ button next to the textbox to open a file explorer window.</li>
+            <li>Find the ‘.xls’ file containing the user records you wish to upload. Ensure that the format of the excel file is ‘.xls’ as ‘.csv’ and ‘.xlsx’ files will not work.</li>
+            <li>Click the ‘Submit’ button once you have found the file you wish to upload.</li>
+            <li>
+                A warning modal will appear to warn you that all the existing user records in the database will be deleted and replaced with the data from excel.
+                Before proceeding with the upload, it is advised that you record all information for users who are still associated with rented mugs,
+                and/or have rented the most mugs during the previous session.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="2.3" style="font-weight: bold; color: black;">2.3 How to View a User’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the user record you wish to view, and click the blue ‘View’ button in the far right column of the data table to open a modal containing that user’s information.</li>
+            <li>Click the ‘Close’ button or ‘X’ button in the top right when you are done viewing the user’s record in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <h3 id="2.4" style="font-weight: bold; color: black;">2.4 How to Edit a User’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the user record you wish to edit and click the blue ‘Edit’ button in the far right column of the data table to open a modal containing that user’s information.</li>
+            <li>
+                Update any of the fields as needed, while keeping in mind the following rules:
+                <ul>
+                    <li>UBC ID - must be a 7 or 8 digit number that does not already exist in the database</li>
+                    <li>Email - must not already exist in the database</li>
+                    <li>
+                        Mug In Use - if unchecking the box to clear a user’s rental status, the ‘Date of Rental’ field must be cleared.
+                        If checking the box to say a user is currently in possession of a mug, the ‘Date of Rental’ field must be filled in with a date
+                    </li>
+                    <li>
+                        Date of Rental - field must be empty if the ‘Mug In Use’ box is unchecked, otherwise it must be filled in with a date (eg. YYYY/MM/DD or YYYY-MM-DD)
+                    </li>
+                    <li>Notes - this field may remain empty and is used for storing any special notes</li>
+                </ul>
+            </li>
+            <li>
+                If any changes are made to the record that you wish to upload to the database, press the blue ‘Save Changes’ button at the bottom of the modal
+                to update the record in the database.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="2.5" style="font-weight: bold; color: black;">2.5 How to Remove a User From the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the user record you wish to delete and click the red ‘Delete button in the far right column of the data table to open a modal containing that user’s information.</li>
+            <li>
+                If you wish to proceed with deleting this record, press the blue ‘Delete Record’ button. However, note that once a record is deleted, the action cannot be undone,
+                unless a backup of the database exists, in which case follow the instructions on the troubleshooting document.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <a href="#">Back to top</a>
+    <hr id="3.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         3.0 Location Supply Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">3.0 Location Supply</h2>
+    <p style="text-align:justify">
+        The Location Supply web page is used to manage the Location Supply data table in the database.
+        Machine’s can be added individually, and once created, machine profiles can be viewed, edited, and deleted.
+        Additionally each machine has it’s own hourly statistics chart to show the average hourly usage of that individual machine.
+        The search bar on the top right can be used to find a record based on machine ID, location, or current supply.
+        <br />
+        <br />
+        Access this page by clicking the ‘Location Supply’ tab on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <h3 id="3.1" style="font-weight: bold; color: black;">3.1 How to Add a New Dispensing Machine to the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the green ‘Create New’ button above the top left of the data table to open a modal window.</li>
+            <li>
+                Fill out the machine’s information, while keeping in mind the following rules:
+                <ul>
+                    <li>Machine ID - must be a 6-character ID containing numbers and/or letters (eg. ABC123), that does not already exist in the database</li>
+                    <li>Opening/Closing Hours - select the opening and closing hours from the drop down lists</li>
+                    <li>Total Capacity - is a numerical value for the maximum number of mugs the machine will be able to hold</li>
+                    <li>Out Of Order - check this box is the machine is not yet ready to be placed in it’s location, or if it is experiencing any technical issues</li>
+                    <li>Notes - this field may remain empty and is used for storing any special notes</li>
+                </ul>
+            </li>
+            <li>Once the all the required fields are filled out, click the blue ‘Save’ button to add the new machine record to the database.</li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="3.2" style="font-weight: bold; color: black;">3.2 How to View a Machine’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the machine record you wish to view, and click the blue ‘View’ button in the far right column of the data table to open a modal containing that machine’s information.</li>
+            <li>Click the ‘Close’ button or ‘X’ button in the top right when you are done viewing the machine’s record in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <h3 id="3.3" style="font-weight: bold; color: black;">3.3 How to View a Machine’s Hourly Statistics Chart</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>
+                Locate the machine record you wish to analyze, and click the blue ‘Chart’ button in the far right column of the data
+                table to open a modal containing that machine’s hourly statistics chart.
+            </li>
+            <li>Click the ‘Close’ button or ‘X’ button in the top right when you are done viewing the machine’s hourly statistics chart in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <h3 id="3.4" style="font-weight: bold; color: black;">3.4 How to Edit a Machine’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the machine record you wish to edit and click the blue ‘Edit’ button in the far right column of the data table to open a modal containing that machine’s information.</li>
+            <li>
+                Update any of the fields as needed, while keeping in mind the following rules:
+                <ul>
+                    <li>Machine ID - must be a 6-character ID containing numbers and/or letters (eg. ABC123), that does not already exist in the database</li>
+                    <li>Opening/Closing Hours - select the opening and closing hours from the drop down lists</li>
+                    <li>Total Capacity - is a numerical value for the maximum number of mugs the machine will be able to hold</li>
+                    <li>Out Of Order - check this box is the machine is not yet ready to be placed in it’s location, or if it is experiencing any technical issues</li>
+                </ul>
+            </li>
+            <li>
+                If any changes are made to the record that you wish to upload to the database, press the blue ‘Save Changes’
+                button at the bottom of the modal to update the record in the database.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="3.5" style="font-weight: bold; color: black;">3.5 How to Remove a Dispensing Machine From the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the machine record you wish to delete and click the red ‘Delete button in the far right column of the data table to open a modal containing that machine’s information.</li>
+            <li>
+                If you wish to proceed with deleting this record, press the blue ‘Delete Record’ button. However, note that once a record is deleted,
+                the action cannot be undone, unless a backup of the database exists, in which case follow the instructions on the troubleshooting document.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <a href="#">Back to top</a>
+    <hr id="4.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         4.0 Mug Registry Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">4.0 Mug Registry</h2>
+    <p style="text-align:justify">
+        The Mug Registry web page is used to manage the Mug Registry data table in the database.
+        Mug’s can be added individually, and once created, mug profiles can be viewed, edited, and deleted.
+        The search bar on the top right can be used to find a record based on mug ID.
+        <br />
+        <br />
+        Access this page by clicking the ‘Mug Registry’ tab on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <h3 id="4.1" style="font-weight: bold; color: black;">4.1 How to Add a New Mug to the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Click the green ‘Create New’ button above the top left of the data table to open a modal window.</li>
+            <li>Make sure that an RFID scanner is plugged as described in section 1.1 ‘How to Return a Borrowed Mug’.</li>
+            <li>Click the ‘Scan RFID’ button and proceed to scan the bottom of the mug on the RFID reader.</li>
+            <li>Click the blue ‘Save’ button to add the new mug record to the database.</li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="4.2" style="font-weight: bold; color: black;">4.2 How to View a Mug’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the mug record you wish to view, and click the blue ‘View’ button in the far right column of the data table to open a modal containing that mug’s information.</li>
+            <li>Click the ‘Close’ button or ‘X’ button in the top right when you are done viewing the mug’s record in order to close the modal.</li>
+        </ol>
+    </p>
+
+    <h3 id="4.3" style="font-weight: bold; color: black;">4.3 How to Edit a Mug’s Profile</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the mug record you wish to edit and click the blue ‘Edit’ button in the far right column of the data table to open a modal containing that mug’s information.</li>
+            <li>The only editable field for a mug record is the ‘Notes’ field which may remain empty and is used for storing any special notes.</li>
+            <li>
+                If a mug’s RFID has broken, rather than being able to edit it, simply delete the record, replace the RFID in the bottom of the mug,
+                and follow section 4.1 ‘How to Add a New Mug to the Program’ to add it back to the program with a different RFID.
+            </li>
+            <li>
+                If any changes are made to the record that you wish to upload to the database, press the blue ‘Save Changes’
+                button at the bottom of the modal to update the record in the database.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <h3 id="4.4" style="font-weight: bold; color: black;">4.4 How to Remove a Mug From the Program</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Locate the mug record you wish to delete and click the red ‘Delete button in the far right column of the data table to open a modal containing that mug’s information.</li>
+            <li>
+                If you wish to proceed with deleting this record, press the blue ‘Delete Record’ button. However, note that once a record is deleted,
+                the action cannot be undone, unless a backup of the database exists, in which case follow the instructions on the troubleshooting document.
+            </li>
+        </ol>
+        *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+    </p>
+
+    <a href="#">Back to top</a>
+    <hr id="5.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         5.0 About Us Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">5.0 About Us</h2>
+    <p style="text-align:justify">
+        The About Us page contains some information about the Mug-Share program and it’s associates.
+        <br />
+        <br />
+        Access this page by clicking the ‘About Us’ tab on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <a href="#">Back to top</a>
+    <hr id="6.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+    @* ******************************************************************************************************************
+         6.0 Change Password Section
+        *******************************************************************************************************************@
+    <h2 style="font-size: 35px; font-weight: bold; color: black;">6.0 Change Password</h2>
+    <p style="text-align:justify">
+        The Change Password page is used to change the password the user uses to log into the web application.
+        <br />
+        <br />
+        Access this page by clicking the ‘Change Password’ tab from the dropdown menu on the navbar at the top of any page (aside from the login screen).
+    </p>
+
+    <h3 id="6.1" style="font-weight: bold; color: black;">6.1 How to Change Password</h3>
+    <p style="text-align:justify">
+        <ol style="margin-left: 2em;">
+            <li>Enter your current password.</li>
+            <li>Enter your new password and retype it. Make sure that the two instances of the new password typed matches.</li>
+            <li>Press the blue ‘Change Password’ button at the bottom of the page to update the record in the database.</li>
+        </ol>
+    </p>
+
+    <a href="#">Back to top</a>
+
+    @{
+        if (Permission == "Admin")
+        {
+            <hr id="7.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+            @* ******************************************************************************************************************
+                 7.0 Security Section
+                *******************************************************************************************************************@
+            <h2 style="font-size: 35px; font-weight: bold; color: black;">7.0 Security</h2>
+            <p style="text-align:justify">
+                The Security web page is used to manage the Security data table in the database.
+                Staff users who need access to the web application and machine can be added individually, once created, staff user profiles can be viewed, edited, and deleted.
+                This page can only be reached with administrator privileges, and admins are unable to change user passwords, as well as alter their own record.
+                The search bar on the top right can be used to find a record based on username, or email.
+                <br />
+                <br />
+                Access this page by clicking the ‘Security’ tab on the navbar at the top of any page (aside from the login screen) if you are an admin, otherwise the tab will not be displayed.
+            </p>
+
+            <h3 id="7.1" style="font-weight: bold; color: black;">7.1 How to Add a New Staff User to the Program</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Click the green ‘Create New’ button above the top left of the data table to open a modal window.</li>
+                    <li>
+                        Fill out the staff user’s information, while keeping in mind the following rules:
+                        <ul>
+                            <li>Staff Card ID - must be a 7 or 8 digit number that does not already exist in the database</li>
+                            <li>Username - cannot contain spaces, and must not already exist in the database</li>
+                            <li>Password/Re-Type Password - must contain the same values</li>
+                            <li>Email - must not already exist in the database</li>
+                            <li>Admin Permission - check this box if you want the staff user to have the ability to delete data and access the Security, and Email List pages</li>
+                        </ul>
+                    </li>
+                    <li>Once the all the required fields are filled out, click the blue ‘Save’ button to add the new staff user record to the database.</li>
+                </ol>
+                *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+            </p>
+
+            <h3 id="7.2" style="font-weight: bold; color: black;">7.2 How to View a Staff User’s Profile</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Locate the staff user record you wish to view, and click the blue ‘View’ button in the far right column of the data table to open a modal containing that staff user’s information.</li>
+                    <li>Click the ‘Close’ button or ‘X’ button in the top right when you are done viewing the staff user’s record in order to close the modal.</li>
+                </ol>
+            </p>
+
+            <h3 id="7.3" style="font-weight: bold; color: black;">7.3 How to Edit a Staff User’s Profile</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Locate the staff user record you wish to edit and click the blue ‘Edit’ button in the far right column of the data table to open a modal containing that staff user’s information.</li>
+                    <li>
+                        Update any of the fields as needed, while keeping in mind the following rules:
+                        <ul>
+                            <li>Staff Card ID - must be a 7 or 8 digit number that does not already exist in the database</li>
+                            <li>Username - cannot contain spaces, and must not already exist in the database</li>
+                            <li>Email - must not already exist in the database</li>
+                            <li>Admin Permission - check this box if you want the staff user to have the ability to delete data and access the Security, and Email List pages</li>
+                        </ul>
+                    </li>
+                    <li>
+                        If any changes are made to the record that you wish to upload to the database, press the blue
+                        ‘Save Changes’ button at the bottom of the modal to update the record in the database.
+                    </li>
+                </ol>
+                *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+            </p>
+
+            <h3 id="7.4" style="font-weight: bold; color: black;">7.4 How to Remove a Staff User From the Program</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Locate the staff user record you wish to delete and click the red ‘Delete button in the far right column of the data table to open a modal containing that staff user’s information.</li>
+                    <li>
+                        If you wish to proceed with deleting this record, press the blue ‘Delete Record’ button. However, note that once a record is deleted,
+                        the action cannot be undone, unless a backup of the database exists, in which case follow the instructions on the troubleshooting document.
+                    </li>
+                </ol>
+                *Note: the ‘Cancel’ button or ‘X’ button in the top right can be pressed at anytime to close the modal.
+            </p>
+
+            <a href="#">Back to top</a>
+            <hr id="8.0" style="width: 100%; color: black; height: 1px; background-color:black;" />
+            @* ******************************************************************************************************************
+                 8.0 Email List Section
+                *******************************************************************************************************************@
+            <h2 style="font-size: 35px; font-weight: bold; color: black;">8.0 Email List</h2>
+            <p style="text-align:justify">
+                The Email List page is used for admin users to obtain the email addresses of certain groups of people, including admins, staff and Mug-Share Users with and/or without a mug.
+                <br />
+                <br />
+                Access this page by clicking the ‘Email List’ tab on the navbar at the top of any page (aside from the login screen) if you are an admin, otherwise the tab will not be displayed.
+            </p>
+
+            <h3 id="8.1" style="font-weight: bold; color: black;">8.1 How to Obtain the Email List of Admin Users</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Select ‘Admin’ from the dropdown menu.</li>
+                    <li>Copy and paste the list of emails into your desired location.</li>
+                </ol>
+            </p>
+
+            <h3 id="8.2" style="font-weight: bold; color: black;">8.2 How to Obtain the Email List of Staff Users</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Select ‘Staff’ from the dropdown menu.</li>
+                    <li>Copy and paste the list of emails into your desired location.</li>
+                </ol>
+            </p>
+
+            <h3 id="8.3" style="font-weight: bold; color: black;">8.3 How to Obtain the Email List of Mug-Share Users</h3>
+            <p style="text-align:justify">
+                <ol style="margin-left: 2em;">
+                    <li>Select ‘Mug-Share Users’ from the dropdown menu.</li>
+                    <li>
+                        If you would like to select Mug-Share Users with a mug only, select the checkbox next to ‘With a Mug.
+                        If you would like to select Mug-Share Users without a mug only, select the checkbox next to ‘Without a Mug’.
+                        If you would like to select all Mug-Share Users, select both ‘With a Mug’ and ‘Without a Mug’ checkboxes.
+                    </li>
+                    <li>Copy and paste the list of emails into your desired location.</li>
+                </ol>
+            </p>
+
+            <a href="#">Back to top</a>
+        }
+    }
+</div>

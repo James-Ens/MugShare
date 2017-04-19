@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            @{
+                var Permission = MugShareApplication.Controllers.BaseController.SessionStorage.AdminPermission;
+                var User = MugShareApplication.Controllers.BaseController.SessionStorage.Username;
+                if (Permission == "Admin")
+                {
+                    <div class="navbar-header">
+                        @*Collapse burger button when window gets too small*@
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbarAdmin">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand"><img src="~/Content/Images/mug_share_logo.gif" width="100" height="45" /></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbarAdmin">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="@Url.Action("MugReturn", "Home")">Home</a></li>
+                            <li><a href="@Url.Action("MugShareUsers", "Datatables")">Mug-Share Users</a></li>
+                            <li><a href="@Url.Action("LocationSupply", "Datatables")">Location Supply</a></li>
+                            <li><a href="@Url.Action("MugRegistry", "Datatables")">Mug Registry</a></li>
+                            <li><a href="@Url.Action("Security", "Datatables")">Security</a></li>
+                            <li><a href="@Url.Action("EmailService", "Home")">Email List</a></li>
+                            <li><a href="@Url.Action("AboutUs", "Home")">About Us</a></li>
+                            <li><a href="@Url.Action("Help", "Home")"><span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Hi, @User!<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("ChangePassword", "Home")">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogIn", "Home")"><span class="glyphicon glyphicon-log-in"></span> Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else if (Permission == "Staff")
+                {
+                    <div class="navbar-header">
+                        @*Collapse burger button when window gets too small*@
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbarStaff">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand"><img src="~/Content/Images/mug_share_logo.gif" width="100" height="45" /></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbarStaff">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="@Url.Action("MugReturn", "Home")">Home</a></li>
+                            <li><a href="@Url.Action("MugShareUsers", "Datatables")">Mug-Share Users</a></li>
+                            <li><a href="@Url.Action("LocationSupply", "Datatables")">Location Supply</a></li>
+                            <li><a href="@Url.Action("MugRegistry", "Datatables")">Mug Registry</a></li>
+                            <li><a href="@Url.Action("AboutUs", "Home")">About Us</a></li>
+                            <li><a href="@Url.Action("Help", "Home")"><span class="glyphicon glyphicon-question-sign"></span> Help</a></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Hi, @User!<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("ChangePassword", "Home")">Change Password</a></li>
+                                    <li><a href="@Url.Action("LogIn", "Home")"><span class="glyphicon glyphicon-log-in"></span>Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="navbar-header">
+                        @*Collapse burger button when window gets too small*@
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbarLogIn">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand"><img src="~/Content/Images/mug_share_logo.gif" width="100" height="45" /></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="myNavbarLogIn">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="@Url.Action("LogIn", "Home")"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+                        </ul>
+                    </div>
+                }
+            }
+        </div>
+    </nav>
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+
+    @*<script>
+              // Place js vars for URIs here
+              var LoadSessionStorageURL = '@Url.Action("LoadSessionStorage", @HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString())';
+              var LoadSecurityURL = '@Url.Action("LoadSecurity", "Base")';
+        </script>*@
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/Chart")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/_Layout")
+    @RenderSection("Javascript", required: false)
+</body>
+
+</html>

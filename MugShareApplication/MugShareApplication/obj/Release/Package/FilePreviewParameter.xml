@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="ubcmugshare-001-site1" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\Logan\\Source\\Repos\\MugShareApplication\\MugShareApplication\\MugShareApplication\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\Logan\\Source\\Repos\\MugShareApplication\\MugShareApplication\\MugShareApplication\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="MugShareDB-Web.config Connection String" description="" value="Data Source=67.231.28.188;Initial Catalog=MugShareDB;Persist Security Info=True;User ID=capstone44;Password=12345678" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\Logan\\Source\\Repos\\MugShareApplication\\MugShareApplication\\MugShareApplication\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='MugShareDB']/@connectionString" />
+  </parameter>
+</parameters>

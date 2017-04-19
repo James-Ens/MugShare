@@ -1,0 +1,256 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+   
+@{
+    ViewBag.Title = "MugRegistry";
+}
+
+@section Javascript {
+    <script src="~/Scripts/Views/Datatables/MugRegistry.js"></script>
+    @* Mug-Share Users URLs *@
+    <script type="text/javascript">
+        var MR_Table_Data_URL = '@Url.Action("MR_TableData", "Datatables")';
+        var MR_GetRecord_URL = '@Url.Action("MR_GetRecord", "Datatables")';
+        var MR_CreateRecord_URL = '@Url.Action("MR_Create", "Datatables")';
+        var MR_EditRecord_URL = '@Url.Action("MR_Edit", "Datatables")';
+        var MR_DeleteRecord_URL = '@Url.Action("MR_Delete", "Datatables")';
+        var MR_MugID_URL = '@Url.Action("MR_MugIDValidator", "Datatables")';
+        var MR_GetRFID_URL = '@Url.Action("GetRFID", "Home")';
+    </script>
+}
+
+<div id="MugRegistry">
+    @* Title Header *@
+    <h2 style="text-align:center; font-weight: bold;">Mug Registry</h2>
+
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            @* Create New User Button *@
+            <button type="button" onclick="MR_create()" class="btn btn-success" data-toggle="modal" data-target="#MR_create"><span class="glyphicon glyphicon-plus"></span> Create New</button>
+            @* Mug-Share Users Datatable *@
+            <table id="MR_Table" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0"></table>
+        </div>
+    </div>
+    <br />
+
+    @*--------------------------------------------------------------------------------------
+        * MUG CREATE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MR_create" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Add New Mug</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="control-label col-sm-offset-1 col-md-3" style="font-size:21px">Mug ID:</label>
+                                <div class="col-md-8">
+                                    <span data-bind="text: MugID" style="font-size:21px"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-7"><button type="button" class="btn btn-default" data-bind="click: MR_getRFID">Scan RFID</button></label>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MR_create_submit()" class="btn btn-info col-md-offset-5">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * MUG READ MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MR_read" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Mug Details</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Mug ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Mug ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: MugID">
+                            </div>
+                        </div>
+
+                        @* Last Borrowed By Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Borrowed By:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: LastBorrowedBy">
+                            </div>
+                        </div>
+
+                        @* Currently In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: CurrentlyInUse"> Currently In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * MUG EDIT MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MR_edit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Update Existing User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Mug ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Mug ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: MugID">
+                            </div>
+                        </div>
+
+                        @* Last Borrowed By Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Borrowed By:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: LastBorrowedBy">
+                            </div>
+                        </div>
+
+                        @* Currently In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: CurrentlyInUse"> Currently In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MR_edit_submit()" class="btn btn-info col-md-offset-5">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * MUG DELETE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MR_delete" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Delete User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Mug ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Mug ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: MugID">
+                            </div>
+                        </div>
+
+                        @* Last Borrowed By Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Borrowed By:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: LastBorrowedBy">
+                            </div>
+                        </div>
+
+                        @* Currently In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: CurrentlyInUse"> Currently In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MR_delete_submit()" class="btn btn-info col-md-offset-5">Delete Record</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

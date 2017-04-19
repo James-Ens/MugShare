@@ -1,0 +1,40 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+
+@{
+    ViewBag.Title = "About Us";
+}
+
+<div class="jumbotron" id="AboutUs">
+    <h1 style="text-align:center; font-weight: bold; color: black;">About Us</h1>
+    <img src="~/Content/Images/mug_share_logo.gif" width="500" height="200" style="margin: auto; display: block;"/>
+    <br />
+    <h4 style="text-align:justify; color: black;">
+        At least 1.5 million disposable cups are generated on UBC campus annually, and less than 50% are sorted into proper waste bins.
+        <br />
+        <br />
+        The Mug-Share program has been developed by AMS sustainability in collaboration with SEEDS to promote sustainable practices through the use of reusable mugs instead of paper cups.
+        The goal of the project is to implement a campus wide mug sharing system in the hopes to encourage students and staff to make more sustainable choices.
+        <br />
+        <br />
+        This machine helps achieve this goal by automating the dispensing of mugs, creating a more convenient experience for the user, and allowing for future program expansion on campus.
+        <br />
+        <br />
+        Once you are registered with the Mug-Share program, simply swipe your UBC card to receive a mug and head on over to Uppercase for some coffee! Then when you’re finished, just return the mug to UpperCase or the SLSC on the lower floor of the Nest.
+    </h4>
+    <div style="display:block">
+        <img src="~/Content/Images/ubc_ece.gif" width="200" height="55" style="margin: auto;" />
+        <img src="~/Content/Images/ubc_sustainability.gif" width="200" height="90" style="margin: auto;" />
+    </div>
+</div>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAwl8AvSRVgk20vO9gfiLP3gAAAAACAAAAAAAQZgAAAAEAACAAAADim5CEGNqLxYgSvYNRx6I34SznJs09pUBjSvt7zk4zLQAAAAAOgAAAAAIAACAAAABCQmPTl95wahG5+vCu7+JPrMaJbYC6a/o+QkLAbr97KCAAAAChBh2v99RqeBl3yYX9HNxOvBdtKaMlxV+IL6lwVKzN/0AAAAC/4M4lbTDMVyHRM60dqhIdybyMLqeN9m8t2LUSH5iOFXmgJUzcO9G1pOiUCskmrnWKctpIDE49+XxxqkPmGiQm</EncryptedPassword>
+    <_PublishTargetUrl>ftp://ftp.Smarterasp.net/ubcmugshare</_PublishTargetUrl>
+    <AllowUntrustedCertificate>True</AllowUntrustedCertificate>
+    <UsePowerShell>False</UsePowerShell>
+  </PropertyGroup>
+</Project>

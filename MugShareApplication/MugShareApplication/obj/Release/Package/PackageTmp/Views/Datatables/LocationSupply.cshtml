@@ -1,0 +1,460 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+   
+@{
+    ViewBag.Title = "LocationSupply";
+}
+
+@section Javascript {
+    <script src="~/Scripts/Views/Datatables/LocationSupply.js"></script>
+    @* Mug-Share Users URLs *@
+    <script type="text/javascript">
+        var LS_Table_Data_URL = '@Url.Action("LS_TableData", "Datatables")';
+        var LS_GetRecord_URL = '@Url.Action("LS_GetRecord", "Datatables")';
+        var LS_HourlyChartData_URL = '@Url.Action("LS_HourlyChartData", "Datatables")';
+        var LS_CreateRecord_URL = '@Url.Action("LS_Create", "Datatables")';
+        var LS_EditRecord_URL = '@Url.Action("LS_Edit", "Datatables")';
+        var LS_DeleteRecord_URL = '@Url.Action("LS_Delete", "Datatables")';
+        var LS_MachineID_URL = '@Url.Action("LS_MachineIDValidator", "Datatables")';
+    </script>
+}
+
+<div id="LocationSupply">
+    @* Title Header *@
+    <h2 style="text-align:center; font-weight: bold;">Location Supply</h2>
+
+    <div class="row">
+        <div class="col-sm-12">
+            @* Create New Machine Button *@
+            <button type="button" onclick="LS_create()" class="btn btn-success" data-toggle="modal" data-target="#LS_create"><span class="glyphicon glyphicon-plus"></span> Create New</button>
+            @* Location Supply Datatable *@
+            <table id="LS_Table" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0"></table>
+        </div>
+    </div>
+    <br />
+
+    @*--------------------------------------------------------------------------------------
+        * LOCATION CREATE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="LS_create" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Add New Machine</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Machine ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Machine ID must be X characters long. (eg. ABC123)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="C_MachineID">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: MachineID">
+                            </div>
+                        </div>
+
+                        @* Machine Location Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine Location:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Description of where the machine is located. (eg. Uppercase cafe, UBC Nest)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="C_MachineLocation">
+                                <input type="text" class="form-control" data-bind="textInput: MachineLocation">
+                            </div>
+                        </div>
+
+                        @* Opening Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Opening Hour:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_OpeningHour">
+                                <select id="OpeningHourDDL" data-bind="options: OpeningHourList, optionsText: 'hourText', value: OpeningHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Closing Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Closing Hour:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_ClosingHour">
+                                <select id="ClosingHourDDL" data-bind="options: ClosingHourList, optionsText: 'hourText', value: ClosingHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Total Capacity Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Capacity:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_TotalCapacity">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: TotalCapacity">
+                            </div>
+                        </div>
+
+                        @* Out Of Order Checkbox *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" data-bind="checked: OutOfOrder"> Out Of Order</label>
+                                    <a data-toggle="tooltip" data-html="true" title="Blank if working. Checked if in need of repair or just temporarily out of service.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="LS_create_submit()" class="btn btn-info col-md-offset-5">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * HOURLY STATISTICS CHART MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="LS_chart" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Hourly Statistics Chart</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group" id="graph_container">
+                            <canvas id="LS_HourlyStatistics"></canvas>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * LOCATION READ MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="LS_read" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Machine Details</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Machine ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: MachineID">
+                            </div>
+                        </div>
+
+                        @* Machine Location Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine Location:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: MachineLocation">
+                            </div>
+                        </div>
+
+                        @* Opening Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Opening Hour:</label>
+                            <div class="col-sm-6">
+                                <select id="CategoryDDL" disabled data-bind="options: OpeningHourList, optionsText: 'hourText', value: OpeningHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Closing Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Closing Hour:</label>
+                            <div class="col-sm-6">
+                                <select id="ClosingHourDDL" disabled data-bind="options: ClosingHourList, optionsText: 'hourText', value: ClosingHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Current Supply Percentage Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Current Supply Percentage:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: CurrentSupply">
+                            </div>
+                        </div>
+
+                        @* Total Capacity Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Capacity:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: TotalCapacity">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Dispensed By Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Dispensed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsDispensed">
+                            </div>
+                        </div>
+
+                        @* Out Of Order Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: OutOfOrder"> Out Of Order</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * LOCATION EDIT MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="LS_edit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Update Existing Machine Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Machine ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Machine ID must be X characters long. (eg. ABC123)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="E_MachineID">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: MachineID">
+                            </div>
+                        </div>
+
+                        @* Machine Location Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine Location:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Description of where the machine is located. (eg. Uppercase cafe, UBC Nest)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="E_MachineLocation">
+                                <input type="text" class="form-control" data-bind="textInput: MachineLocation">
+                            </div>
+                        </div>
+
+                        @* Opening Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Opening Hour:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_OpeningHour">
+                                <select id="CategoryDDL" data-bind="options: OpeningHourList, optionsText: 'hourText', value: OpeningHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Closing Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Closing Hour:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_ClosingHour">
+                                <select id="ClosingHourDDL" data-bind="options: ClosingHourList, optionsText: 'hourText', value: ClosingHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Current Supply Percentage Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Current Supply Percentage:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: CurrentSupply">
+                            </div>
+                        </div>
+
+                        @* Total Capacity Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Capacity:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_TotalCapacity">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: TotalCapacity">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Dispensed By Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Dispensed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsDispensed">
+                            </div>
+                        </div>
+
+                        @* Out Of Order Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" data-bind="checked: OutOfOrder"> Out Of Order</label>
+                                    <a data-toggle="tooltip" data-html="true" title="Blank if working. Checked if in need of repair or just temporarily out of service.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="LS_edit_submit()" class="btn btn-info col-md-offset-5">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+    * LOCATION DELETE MODAL
+    * ----------------------------------------------------------------------------------*@
+    <div id="LS_delete" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Delete Machine Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Machine ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: MachineID">
+                            </div>
+                        </div>
+
+                        @* Machine Location Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Machine Location:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: MachineLocation">
+                            </div>
+                        </div>
+
+                        @* Opening Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Opening Hour:</label>
+                            <div class="col-sm-6">
+                                <select id="CategoryDDL" disabled data-bind="options: OpeningHourList, optionsText: 'hourText', value: OpeningHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Closing Hour Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Closing Hour:</label>
+                            <div class="col-sm-6">
+                                <select id="ClosingHourDDL" disabled data-bind="options: ClosingHourList, optionsText: 'hourText', value: ClosingHour, optionsCaption: 'Choose...'"></select>
+                            </div>
+                        </div>
+
+                        @* Current Supply Percentage Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Current Supply Percentage:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: CurrentSupply">
+                            </div>
+                        </div>
+
+                        @* Total Capacity Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Capacity:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: TotalCapacity">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Dispensed Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Dispensed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsDispensed">
+                            </div>
+                        </div>
+
+                        @* Out Of Order Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: OutOfOrder"> Out Of Order</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="LS_delete_submit()" class="btn btn-info col-md-offset-5">Delete Record</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

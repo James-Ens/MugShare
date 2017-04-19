@@ -1,0 +1,51 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+        else if (MugShareApplication.Controllers.BaseController.SessionStorage.AdminPermission != "Admin")
+        {
+            Response.Redirect("/Home");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+
+@{
+    ViewBag.Title = "Email List";
+}
+
+@section Javascript {
+    <script src="~/Scripts/Views/Home/EmailService.js"></script>
+    @* Log In URLs *@
+    <script type="text/javascript">
+        var EmailService_URL = '@Url.Action("SendEmailService", "Home")';
+        var GetContactList_URL = '@Url.Action("GetContactList", "Home")';
+    </script>
+}
+
+<h2 style="text-align:center; font-weight: bold;">Email List</h2>
+<div id="ContactList">
+    <div id="EmailContactListOptions" style="height:50px;text-align:center">
+        <select data-bind="options: EmailContactListGroups, value: EmailContactListGroup, optionsCaption: 'Select Group', event: { change: EmailContactListGroupChanged }">
+            <option value="Admin">Admin</option>
+            <option value="Staff">Staff</option>
+            <option value="Mug-Share Users">Mug-Share Users</option>
+        </select>
+
+        <div class="MugShareUsersOptions" style="display:none" onclick="MugShareUsersOptionsChanged()">
+            <br />
+            <label><input type="checkbox" value="WithMug" data-bind="checked: MugShareUsersType">With a Mug</label>
+            <br />
+            <label><input type="checkbox" value="WithoutMug" data-bind="checked: MugShareUsersType">Without a Mug</label>
+        </div>
+    </div>
+    <br />
+    <br />
+    <textarea class="form-control" rows="15" id="EmailContactList" data-bind="textInput: EmailContactList" style="margin-left:auto; margin-right:auto;max-width:500px"></textarea>
+</div>

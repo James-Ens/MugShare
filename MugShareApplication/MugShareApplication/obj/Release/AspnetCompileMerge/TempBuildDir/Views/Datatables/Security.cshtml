@@ -1,0 +1,381 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+        else if(MugShareApplication.Controllers.BaseController.SessionStorage.AdminPermission != "Admin")
+        {
+            Response.Redirect("/Home");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+   
+@{
+    ViewBag.Title = "Security";
+}
+
+@section Javascript {
+    <script src="~/Scripts/Views/Datatables/Security.js"></script>
+    @* Mug-Share Users URLs *@
+    <script type="text/javascript">
+        var S_Table_Data_URL = '@Url.Action("S_TableData", "Datatables")';
+        var S_GetRecord_URL = '@Url.Action("S_GetRecord", "Datatables")';
+        var S_CreateRecord_URL = '@Url.Action("S_Create", "Datatables")';
+        var S_EditRecord_URL = '@Url.Action("S_Edit", "Datatables")';
+        var S_DeleteRecord_URL = '@Url.Action("S_Delete", "Datatables")';
+        var S_StaffCardID_URL = '@Url.Action("S_StaffCardIDValidator", "Datatables")';
+        var S_Username_URL = '@Url.Action("S_UsernameValidator", "Datatables")';
+        var S_Email_URL = '@Url.Action("S_EmailValidator", "Datatables")';
+    </script>
+}
+
+<div id="Security">
+    @* Title Header *@
+    <h2 style="text-align:center; font-weight: bold;">Security</h2>
+
+    <div class="row">
+        <div class="col-sm-12">
+            @* Create New Web App User Button *@
+            <button type="button" onclick="S_create()" class="btn btn-success" data-toggle="modal" data-target="#S_create"><span class="glyphicon glyphicon-plus"></span> Create New</button>
+            @* Security Datatable *@
+            <table id="S_Table" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0"></table>
+        </div>
+    </div>
+    <br />
+
+    @*--------------------------------------------------------------------------------------
+        * SECURITY CREATE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="S_create" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Create New Staff User</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_FirstName">
+                                <input type="text" class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_LastName">
+                                <input type="text" class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Staff Card ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Staff Card ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Staff card ID must be 7 or 8 digits long. (eg. 1234567 or 12345678)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="C_StaffCardID">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: StaffCardID">
+                            </div>
+                        </div>
+
+                        @* Username Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Username:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Must not contain spaces. (eg. johndoe is allowed, john doe is not)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="C_Username">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Username">
+                            </div>
+                        </div>
+
+                        @* Password Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Password:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_Password">
+                                <input type="text" class="form-control" data-bind="textInput: Password">
+                            </div>
+                        </div>
+
+                        @* Re-Type Password Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Re-Type Password:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_ReTypePassword">
+                                <input type="text" class="form-control" data-bind="textInput: ReTypePassword">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_Email">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Admin Permission Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" data-bind="checked: AdminPermission"> Admin Permission</label>
+                                    <a data-toggle="tooltip" data-html="true" title="Gives staff user delete permissions and access to the security table.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="S_create_submit()" class="btn btn-info col-md-offset-5">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+    * SECURITY READ MODAL
+    * ----------------------------------------------------------------------------------*@
+    <div id="S_read" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Staff User Details</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Staff Card ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Staff Card ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: StaffCardID">
+                            </div>
+                        </div>
+
+                        @* Username Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Username:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: Username">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Admin Permission Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: AdminPermission"> Admin Permission</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+    * SECURITY EDIT MODAL
+    * ----------------------------------------------------------------------------------*@
+    <div id="S_edit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Update Existing Staff User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_FirstName">
+                                <input type="text" class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_LastName">
+                                <input type="text" class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Staff Card ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Staff Card ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Staff card ID must be 7 or 8 digits long. (eg. 1234567 or 12345678)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="E_StaffCardID">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: StaffCardID">
+                            </div>
+                        </div>
+
+                        @* Username Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Username:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Must not contain spaces. (eg. johndoe is allowed, john doe is not)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="E_Username">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Username">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_Email">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Admin Permission Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" data-bind="checked: AdminPermission"> Admin Permission</label>
+                                    <a data-toggle="tooltip" data-html="true" title="Gives staff user delete permissions and access to the security table.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="S_edit_submit()" class="btn btn-info col-md-offset-5">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+    * SECURITY DELETE MODAL
+    * ----------------------------------------------------------------------------------*@
+    <div id="S_delete" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Delete Staff User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Staff Card ID Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Staff Card ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: StaffCardID">
+                            </div>
+                        </div>
+
+                        @* Username Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Username:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" required data-bind="textInput: Username">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Admin Permission Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: AdminPermission"> Admin Permission</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="S_delete_submit()" class="btn btn-info col-md-offset-5">Delete Record</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

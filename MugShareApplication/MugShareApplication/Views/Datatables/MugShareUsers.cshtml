@@ -1,0 +1,418 @@
+﻿@{
+    try
+    {
+        if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
+        {
+            Response.Redirect("/Home/LogIn");
+        }
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/LogIn");
+    }
+}
+
+@{
+    ViewBag.Title = "Mug Share Users";
+}
+
+@section Javascript {
+    <script src="~/Scripts/Views/Datatables/MugShareUsers.js"></script>
+    @* Mug-Share Users URLs *@
+    <script type="text/javascript">
+        var MSU_Table_Data_URL = '@Url.Action("MSU_TableData", "Datatables")';
+        var MSU_GetRecord_URL = '@Url.Action("MSU_GetRecord", "Datatables")';
+        var MSU_CreateRecord_URL = '@Url.Action("MSU_Create", "Datatables")';
+        var MSU_EditRecord_URL = '@Url.Action("MSU_Edit", "Datatables")';
+        var MSU_DeleteRecord_URL = '@Url.Action("MSU_Delete", "Datatables")';
+        var MSU_StudentNumber_URL = '@Url.Action("MSU_StudentNumberValidator", "Datatables")';
+        var MSU_Email_URL = '@Url.Action("MSU_EmailValidator", "Datatables")';
+
+        var MSU_Excel_URL = '@Url.Action("MSU_Excel", "Datatables")';
+    </script>
+}
+
+<div id="MugShareUsers">
+    @* Title Header *@
+    <h2 style="text-align:center; font-weight: bold;">Mug-Share Users</h2>
+
+    <div class="row">
+        <div class="col-sm-12">
+            @* Create New User Button *@
+            <button type="button" onclick="MSU_create()" class="btn btn-success" data-toggle="modal" data-target="#MSU_create"><span class="glyphicon glyphicon-plus"></span> Create New</button>
+            <button type="button" onclick="MSU_upload()" class="btn btn-primary" data-toggle="modal" data-target="#MSU_upload"><span class="glyphicon glyphicon-upload"></span> Upload From Excel</button>
+            @* Mug-Share Users Datatable *@
+            <table id="MSU_Table" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0"></table>
+        </div>
+    </div>
+    <br />
+
+    @*--------------------------------------------------------------------------------------
+        * USER CREATE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MSU_create" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Create New User</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Student Number Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">UBC ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Student number must be 7 or 8 digits long. (eg. 1234567 or 12345678)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="C_StudentNumber">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: StudentNumber">
+                            </div>
+                        </div>
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_FirstName">
+                                <input type="text" class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_LastName">
+                                <input type="text" class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="C_Email">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MSU_create_submit()" class="btn btn-info col-md-offset-5">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * USER UPLOAD MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MSU_upload" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Upload Excel File</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="btn-file control-label col-sm-offset-1 col-sm-4" style="font-size:15px">Select an excel file...</label>
+                            <div class="col-sm-6">
+                                <input type="file" hidden data-bind="textInput: ExcelPath">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MSU_upload_submit()" class="btn btn-info col-md-offset-5">Continue</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * USER READ MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MSU_read" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">User Details</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Student Number Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">UBC ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: StudentNumber">
+                            </div>
+                        </div>
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Mug In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: MugInUse"> Mug In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Date Of Rental Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Date Of Rental:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: DateOfRental">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Borrowed Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Borrowed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsBorrowed">
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * USER EDIT MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MSU_edit" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Update Existing User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Student Number Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">UBC ID:<q style="color:red;" />*</label>
+                            <a data-toggle="tooltip" data-html="true" title="Student number must be 7 or 8 digits long. (eg. 1234567 or 12345678)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div class="col-sm-6" id="E_StudentNumber">
+                                <input type="text" class="form-control" onkeypress="numCheck(event)" data-bind="textInput: StudentNumber">
+                            </div>
+                        </div>
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_FirstName">
+                                <input type="text" class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_LastName">
+                                <input type="text" class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:<q style="color:red;" />*</label>
+                            <div class="col-sm-6" id="E_Email">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Mug In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" data-bind="checked: MugInUse"> Mug In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Date Of Rental Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Date Of Rental:</label>
+                            <div class="col-sm-6" id="E_DateOfRental">
+                                <input type="text" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: DateOfRental">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Borrowed Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Borrowed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsBorrowed">
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MSU_edit_submit()" class="btn btn-info col-md-offset-5">Save Changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*--------------------------------------------------------------------------------------
+        * USER DELETE MODAL
+        * ----------------------------------------------------------------------------------*@
+    <div id="MSU_delete" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
+                    <h2 class="modal-title" style="color: white;">Delete User Profile</h2>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+
+                        @* Student Number Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">UBC ID:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: StudentNumber">
+                            </div>
+                        </div>
+
+                        @* First Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">First Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: FirstName">
+                            </div>
+                        </div>
+
+                        @* Last Name Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Last Name:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: LastName">
+                            </div>
+                        </div>
+
+                        @* Email Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Email:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: Email">
+                            </div>
+                        </div>
+
+                        @* Mug In Use Check Box *@
+                        <div class="form-group">
+                            <div class="col-sm-offset-5 col-sm-6">
+                                <div class="checkbox">
+                                    <label style="font-weight: bold;"><input type="checkbox" disabled data-bind="checked: MugInUse"> Mug In Use</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Date Of Rental Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Date Of Rental:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: DateOfRental">
+                            </div>
+                        </div>
+
+                        @* Total Mugs Borrowed Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Total Mugs Borrowed:</label>
+                            <div class="col-sm-6">
+                                <input type="text" disabled class="form-control" data-bind="textInput: TotalMugsBorrowed">
+                            </div>
+                        </div>
+
+                        @* Notes Field *@
+                        <div class="form-group">
+                            <label class="control-label col-sm-offset-1 col-sm-4">Notes:</label>
+                            <div class="col-sm-6">
+                                <textarea disabled class="form-control" rows="5" data-bind="textInput: Notes"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" onclick="MSU_delete_submit()" class="btn btn-info col-md-offset-5">Delete Record</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
