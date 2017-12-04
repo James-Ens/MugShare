@@ -87,6 +87,21 @@ namespace MugShareApplication.Controllers
         {
             return View();
         }
+        /*--------------------------------------------------------------------------------------
+        * HELP FUNCTIONS:
+        * 
+        * - SignUp()
+        * -------------------------------------------------------------------------------------*/
+        /*
+         Function: Help
+
+         Opens Sign Up view
+       */
+        public ActionResult SignUp()
+        {
+            return View();
+        }
+
 
         /*--------------------------------------------------------------------------------------
         * STATISTICS FUNCTIONS:
@@ -208,7 +223,7 @@ namespace MugShareApplication.Controllers
             }
             catch (Exception)
             {
-                if(comPort != null)
+                if (comPort != null)
                 {
                     comPort.Close();
                 }

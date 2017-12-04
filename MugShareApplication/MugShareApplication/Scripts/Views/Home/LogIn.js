@@ -24,9 +24,7 @@ $(document).ready(function () {
 ----------------------------------------------------------------------------------------*/
 // triggers a log in attempt
 function logIn_submit() {
-    // Auto post to home 
-     window.location.href = "/Home";
-    //logInAjax();
+    logInAjax();
 }
 
 // if the enter button is pressed in the password field, run logIn_submit()
@@ -74,7 +72,9 @@ function logIn_clear() {
     If log in is unsuccessful, clear Password in knockout model so that the Password field is empty
 */
 function logInAjax() {
-    var jsonString = { "LogInUsername": logIn_koModel.Username(), "LogInPassword": logIn_koModel.Password() };
+    var u = $("#Username").val();
+    var p = $("#Password").val();
+    var jsonString = { "LogInUsername": u, "LogInPassword": p };
     $.ajax({
         url: ProcessLogIn_URL,
         data: jsonString,
@@ -155,4 +155,8 @@ function forgotPasswordAjax() {
             }
         }
     });
+}
+
+function SignUp(url) {
+    window.location.href = url;
 }
