@@ -38,9 +38,10 @@ $(document).ready(function () {
     }
 
     ko.applyBindings(return_koModel, document.getElementById("MugReturn"));
+     
 
     getMugCountYearly();
-    //$(".Admin").show();
+    $(".Admin").show();
 });
 
 /*--------------------------------------------------------------------------------------
@@ -193,12 +194,14 @@ function getMugCountYearly() {
             for(var i = 0; i < data.length; i++) {
                 if(data[i].Year == year)
                 {
-                    return_koModel.MugCountYearly(data[i].TotalMugsBorrowed);
+                    $("#MugCountYearly").text(data[i].TotalMugsBorrowed);
+                    //return_koModel.MugCountYearly(data[i].TotalMugsBorrowed);
                     break;
                 }
 
                 // If unable to obtain the total mugs borrowed for some reason, output 0
-                return_koModel.MugCountYearly(0);
+                $("#MugCountYearly").text(0);
+                //return_koModel.MugCountYearly(0);
             }
         },
         error: function () {

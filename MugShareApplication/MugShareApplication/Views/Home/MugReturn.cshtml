@@ -1,4 +1,4 @@
-﻿@{ 
+﻿@{ /*
     try
     {
         if (MugShareApplication.Controllers.BaseController.SessionStorage.Username == null)
@@ -9,12 +9,13 @@
     catch (Exception)
     {
         Response.Redirect("/Home/LogIn");
-    }
+    }*/
 }   
 
 @{
     ViewBag.Title = "Home Page";
 }
+@Scripts.Render("~/bundles/knockout")
 
     @section Javascript {
     <script src="~/Scripts/Views/Home/MugReturn.js"></script>
@@ -25,6 +26,7 @@
         var YearlyChart_Data_URL = '@Url.Action("YearlyChartData", "Home")';
         var GetRFID_URL = '@Url.Action("GetRFID", "Home")';
     </script>
+    <script src="~/Scripts/knockout-3.4.2.js"></script> 
 }
 
 <div class="jumbotron" id="MugReturn">
@@ -32,7 +34,7 @@
         <img src="~/Content/Images/mug_logo.gif" width="250" height="300"/>
     </div>
     <div id="MugCounter" class="col-md-4">
-        THIS YEAR<br /> <h3><span data-bind="text: MugCountYearly"></span></h3>mugs borrowed
+        THIS YEAR<br /> <h3><span id="MugCountYearly" data-bind="text: MugCountYearly"></span></h3>mugs borrowed
     </div>
     <div class="col-md-4">
         <!-- Trigger the modal with a button -->
@@ -45,8 +47,8 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
-                        <h2 class="modal-title" style="color: white;">Mug Return</h2>
+                        <button type="button" style="color: black;" class="close" data-dismiss="modal">&times;</button>
+                        <h2 class="modal-title" style="color: black;">Mug Return</h2>
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
@@ -89,8 +91,8 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
-                <h2 class="modal-title" style="color: white;">Monthly Statistics Chart</h2>
+                <button type="button" style="color: black;" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title" style="color: black;">Monthly Statistics Chart</h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
@@ -111,8 +113,8 @@
 
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" style="color: white;" class="close" data-dismiss="modal">&times;</button>
-                <h2 class="modal-title" style="color: white;">Yearly Statistics Chart</h2>
+                <button type="button" style="color: black;" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title" style="color: black;">Yearly Statistics Chart</h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">

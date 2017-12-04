@@ -1,4 +1,5 @@
 ﻿// Initializes a model of knockout observables used in the html
+/*
 var logIn_koModel = {
     Admin: ko.observable(true),
 
@@ -12,6 +13,7 @@ var logIn_koModel = {
 $(document).ready(function () {
     ko.applyBindings(logIn_koModel, document.getElementById("LogIn"));
 });
+*/
 
 /*--------------------------------------------------------------------------------------
     LOG IN FUNCTIONS:
@@ -22,7 +24,9 @@ $(document).ready(function () {
 ----------------------------------------------------------------------------------------*/
 // triggers a log in attempt
 function logIn_submit() {
-    logInAjax();
+    // Auto post to home 
+     window.location.href = "/Home";
+    //logInAjax();
 }
 
 // if the enter button is pressed in the password field, run logIn_submit()
