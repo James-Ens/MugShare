@@ -77,12 +77,6 @@ function MSU_DataTable(data) {
 */
 function MSU_create() {
     MSU_clear_model();
-    MSU_createDefaultTextFields();
-    $('#MSU_create').modal({
-        show: true,
-        backdrop: false,
-        keyboard: false
-    });
 }
 
 /*
@@ -115,6 +109,7 @@ function MSU_upload() {
         backdrop: false,
         keyboard: false
     });
+    
 }
 
 /*
@@ -146,11 +141,13 @@ function MSU_upload_submit() {
 */
 function MSU_read(UserKey) {
     MSU_clear_model();
+    /*
     $('#MSU_read').modal({
         show: true,
         backdrop: false,
         keyboard: false
     });;
+    */
     MSU_GetRecord(UserKey);
 }
 
@@ -174,11 +171,12 @@ function MSU_read(UserKey) {
 function MSU_edit(UserKey) {
     MSU_clear_model();
     MSU_editDefaultTextFields();
+    /*
     $('#MSU_edit').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     MSU_GetRecord(UserKey);
 }
 
@@ -213,11 +211,12 @@ function MSU_edit_submit() {
 */
 function MSU_delete(UserKey) {
     MSU_clear_model();
+    /*
     $('#MSU_delete').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     MSU_GetRecord(UserKey);
 }
 

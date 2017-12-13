@@ -41,7 +41,7 @@ $(document).ready(function () {
      
 
     getMugCountYearly();
-    $(".Admin").show();
+   // $(".Admin").show();
 });
 
 /*--------------------------------------------------------------------------------------
@@ -59,11 +59,13 @@ $(document).ready(function () {
 */
 function returnModal() {
     returnModal_clear();
+    return_koModel.MugID(0);
+    /*
     $('#MugReturnModal').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });
+    });*/
 }
 
 function returnModal_submit() {

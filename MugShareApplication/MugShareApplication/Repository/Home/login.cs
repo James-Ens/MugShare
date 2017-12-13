@@ -30,10 +30,12 @@ namespace MugShareApplication.Repository.Home
         */
         public static bool GetAdminPermission(string LogInUsername, string LogInPassword)
         {
-            BaseController.SessionStorage.Username = LogInUsername;
-            BaseController.SessionStorage.AdminPermission = "Staff";
-            return true;
             /*
+            BaseController.SessionStorage.Username = LogInUsername;
+            BaseController.SessionStorage.AdminPermission = "Admin";
+            return true;
+            */
+            
             SqlConnection dbconnection = new SqlConnection();
             SqlCommand dbcommand = new SqlCommand();
             SqlDataReader dbreader;
@@ -84,7 +86,8 @@ namespace MugShareApplication.Repository.Home
             {
                 if (dbconnection.State == ConnectionState.Open) { dbconnection.Close(); }
             }
-            */
+            
+            
         }
 
         /*

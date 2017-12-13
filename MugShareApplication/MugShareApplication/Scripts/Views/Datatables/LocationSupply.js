@@ -95,11 +95,12 @@ function LS_DataTable(data) {
 function LS_create() {
     LS_clear_model();
     LS_createDefaultTextFields();
+    /*
     $('#LS_create').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });
+    });*/
 }
 
 /*
@@ -131,11 +132,12 @@ function LS_create_submit() {
 */
 function LS_read(MachineKey) {
     LS_clear_model();
+    /*
     $('#LS_read').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     LS_GetRecord(MachineKey);
 }
 
@@ -155,11 +157,12 @@ function LS_read(MachineKey) {
         MachineID - The machine ID of the record selected
 */
 function LS_chart(MachineID, OpeningHour, ClosingHour) {
+    /*
     $('#LS_chart').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     LS_HourlyChartDataAjax(MachineID, OpeningHour, ClosingHour);
 }
 
@@ -183,11 +186,12 @@ function LS_chart(MachineID, OpeningHour, ClosingHour) {
 function LS_edit(MachineKey) {
     LS_clear_model();
     LS_editDefaultTextFields();
+    /*
     $('#LS_edit').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     LS_GetRecord(MachineKey);
 }
 
@@ -222,11 +226,12 @@ function LS_edit_submit() {
 */
 function LS_delete(MachineKey) {
     LS_clear_model();
+    /*
     $('#LS_delete').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     LS_GetRecord(MachineKey);
 }
 

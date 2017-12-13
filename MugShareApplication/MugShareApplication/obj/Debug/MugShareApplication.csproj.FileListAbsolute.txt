@@ -447,3 +447,4 @@ C:\Users\james\Source\Repos\MugShare\MugShareApplication\MugShareApplication\bin
 C:\Users\james\Source\Repos\MugShare\MugShareApplication\MugShareApplication\bin\Microsoft.AspNet.Identity.Core.xml
 C:\Users\james\Source\Repos\MugShare\MugShareApplication\MugShareApplication\obj\Debug\MugShareApplication.dll
 C:\Users\james\Source\Repos\MugShare\MugShareApplication\MugShareApplication\obj\Debug\MugShareApplication.pdb
+C:\Users\james\Source\Repos\MugShare\MugShareApplication\MugShareApplication\obj\Debug\MugShareApplication.csprojResolveAssemblyReference.cache

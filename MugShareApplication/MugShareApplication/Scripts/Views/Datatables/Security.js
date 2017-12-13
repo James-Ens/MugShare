@@ -76,11 +76,11 @@ function S_DataTable(data) {
 function S_create() {
     S_clear_model();
     S_createDefaultTextFields();
-    $('#S_create').modal({
+   /* $('#S_create').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });
+    });*/
 }
 
 /*
@@ -112,11 +112,12 @@ function S_create_submit() {
 */
 function S_read(SecurityKey) {
     S_clear_model();
+    /*
     $('#S_read').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     S_GetRecord(SecurityKey);
 }
 
@@ -140,11 +141,12 @@ function S_read(SecurityKey) {
 function S_edit(SecurityKey) {
     S_clear_model();
     S_editDefaultTextFields();
+    /*
     $('#S_edit').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     S_GetRecord(SecurityKey);
 }
 
@@ -179,11 +181,12 @@ function S_edit_submit() {
 */
 function S_delete(SecurityKey) {
     S_clear_model();
+    /*
     $('#S_delete').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     S_GetRecord(SecurityKey);
 }
 

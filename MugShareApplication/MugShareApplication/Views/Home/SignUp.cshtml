@@ -29,7 +29,7 @@
 
             @* Student Number Field *@
             <div class="form-group">
-                <label class="control-label col-sm-offset-1 col-sm-4">UBC ID<label style="color:red;" />*</label></label>
+                <label class="control-label col-sm-offset-1 col-sm-4">UBC ID <label style="color:red;">* </label></label> 
                 <div class="col-sm-6" id="C_StudentNumber">
                     <input type="text" class="form-control" title="Student number must be 7 or 8 digits long. (eg. 1234567 or 12345678)" onkeypress="numCheck(event)" data-bind="textInput: StudentNumber" required>
                 </div>
@@ -37,7 +37,7 @@
 
             @* First Name Field *@
             <div class="form-group">
-                <label class="control-label col-sm-offset-1 col-sm-4">First Name<label style="color:red;" />*</label></label>
+                <label class="control-label col-sm-offset-1 col-sm-4">First Name<label style="color:red;" >* </label></label>
                 <div class="col-sm-6" id="C_FirstName">
                     <input type="text" class="form-control" data-bind="textInput: FirstName" required>
                 </div>
@@ -45,7 +45,7 @@
 
             @* Last Name Field *@
             <div class="form-group">
-                <label class="control-label col-sm-offset-1 col-sm-4">Last Name<label style="color:red;" />*</label></label>
+                <label class="control-label col-sm-offset-1 col-sm-4">Last Name<label style="color:red;" >* </label></label>
                 <div class="col-sm-6" id="C_LastName">
                     <input type="text" class="form-control" data-bind="textInput: LastName" required>
                 </div>
@@ -53,7 +53,7 @@
 
             @* Email Field *@
             <div class="form-group">
-                <label class="control-label col-sm-offset-1 col-sm-4">Email<label style="color:red;" />*</label></label>
+                <label class="control-label col-sm-offset-1 col-sm-4">Email<label style="color:red;" >* </label></label>
                 <div class="col-sm-6" id="C_Email">
                     <input type="email" class="form-control" onkeypress="noSpaces(event)" data-bind="textInput: Email" required>
                 </div>
@@ -70,7 +70,7 @@
     </div>
     <div class="modal-footer">
         <button type="submit" onclick="MSU_create_submit()" class="btn btn-info col-md-offset-5">Save</button>
-        <button type="button" onclick="location.href='@Url.Action("Login","Home")'" class="btn btn-default" >Cancel</button>
+        <button type="button" onclick="location.href='@Url.Action("Login","Home")'" class="btn btn-default" > Cancel </button>
     </div>
 </body>
 </html>

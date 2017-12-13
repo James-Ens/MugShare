@@ -66,11 +66,12 @@ function MR_DataTable(data) {
 */
 function MR_create() {
     MR_clear_model();
+    /*
     $('#MR_create').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });
+    });*/
 }
 
 /*
@@ -101,11 +102,12 @@ function MR_create_submit() {
 */
 function MR_read(MugKey) {
     MR_clear_model();
+    /*
     $('#MR_read').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     MR_GetRecord(MugKey);
 }
 
@@ -128,11 +130,12 @@ function MR_read(MugKey) {
 */
 function MR_edit(MugKey) {
     MR_clear_model();
+    /*
     $('#MR_edit').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     MR_GetRecord(MugKey);
 }
 
@@ -165,11 +168,12 @@ function MR_edit_submit() {
 */
 function MR_delete(MugKey) {
     MR_clear_model();
+    /*
     $('#MR_delete').modal({
         show: true,
         backdrop: false,
         keyboard: false
-    });;
+    });;*/
     MR_GetRecord(MugKey);
 }
 
