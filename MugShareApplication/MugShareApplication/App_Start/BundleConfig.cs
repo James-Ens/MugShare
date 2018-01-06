@@ -39,7 +39,7 @@ namespace MugShareApplication
             bundles.Add(new ScriptBundle("~/bundles/_Layout").Include(
                       "~/Scripts/Views/_Layout.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/Content/CssBundle").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/toastr.css",
                       "~/Content/site.css",

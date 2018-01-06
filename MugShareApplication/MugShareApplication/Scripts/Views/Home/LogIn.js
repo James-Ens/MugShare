@@ -55,7 +55,8 @@ function logIn_enter_event(e) {
     Clears Password in knockout model
 */
 function logIn_clear() {
-    logIn_koModel.Password(null);
+    $("#Password").val("");
+    //logIn_koModel.Password(null);
 }
 
 /*--------------------------------------------------------------------------------------
@@ -73,6 +74,7 @@ function logIn_clear() {
 */
 function logInAjax() {
     var u = $("#Username").val();
+
     var p = $("#Password").val();
     var jsonString = { "LogInUsername": u, "LogInPassword": p };
     $.ajax({
@@ -135,7 +137,8 @@ function forgotPassword_clear() {
     Clear ForgotPassword_Username and ForgotPassword_Email in knockout model so that the fields are empty are the process
 */
 function forgotPasswordAjax() {
-    var jsonString = { "ForgotPassword_Email": logIn_koModel.ForgotPassword_Email() };
+    
+    var jsonString = {"ForgotPassword_Email" : $("#Email").val()};
     $.ajax({
         url: ProcessForgotPassword_URL,
         data: jsonString,
