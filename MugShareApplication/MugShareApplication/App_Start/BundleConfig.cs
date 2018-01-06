@@ -8,6 +8,7 @@ namespace MugShareApplication
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.IgnoreList.Clear();
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -45,6 +46,8 @@ namespace MugShareApplication
                       "~/Content/site.css",
                       "~/Content/DataTables/css/jquery.dataTables.min.css",
                       "~/Content/css/DataTables.less"));
+            
+
         }
     }
 }
