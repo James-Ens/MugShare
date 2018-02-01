@@ -25,6 +25,7 @@
         var MonthlyChart_Data_URL = '@Url.Action("MonthlyChartData", "Home")';
         var YearlyChart_Data_URL = '@Url.Action("YearlyChartData", "Home")';
         var GetRFID_URL = '@Url.Action("GetRFID", "Home")';
+        var SignUp_URL = '@Url.Action("SignUp", "Home")'
     </script>
     <script src="~/Scripts/knockout-3.4.2.js"></script> 
 }
@@ -39,6 +40,7 @@
     <div class="col-md-4">
         <!-- Trigger the modal with a button -->
         <button type="button" onclick="returnModal()" class="btn btn-info btn-lg" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#MugReturnModal">Mug Return</button>
+        <button type="button" class="btn btn-info btn-lg" onclick="SignUp()">Add New User</button>
 
         <!-- Modal -->
         <div id="MugReturnModal" class="modal fade" role="dialog">

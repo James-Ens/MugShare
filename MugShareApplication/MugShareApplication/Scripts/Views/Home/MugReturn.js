@@ -242,3 +242,7 @@ function getRFID() {
         }
     });
 }
+
+function SignUp(){
+ window.location.href = SignUp_URL;
+}
