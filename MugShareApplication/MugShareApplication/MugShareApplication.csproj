@@ -68,7 +68,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -240,7 +239,6 @@
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
     <Content Include="Scripts\jquery-3.2.1-vsdoc.js" />
-    <None Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -497,6 +495,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Views\Home\SignUp.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -487,4 +487,3 @@ C:/Users/james/Source/Repos/MugShare/MugShareApplication/MugShareApplication/obj
 /Users/James/Projects/James-Ens/MugShare.git/MugShareApplication/MugShareApplication/obj/Debug/MugShareApplication.csproj.CoreCompileInputs.cache
 /Users/James/Projects/James-Ens/MugShare.git/MugShareApplication/MugShareApplication/obj/Debug/MugShareApplication.dll
 /Users/James/Projects/James-Ens/MugShare.git/MugShareApplication/MugShareApplication/obj/Debug/MugShareApplication.pdb
-/Users/James/Projects/James-Ens/MugShare.git/MugShareApplication/MugShareApplication/obj/Debug/MugShareApplication.csprojResolveAssemblyReference.cache
